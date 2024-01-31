@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="TForm">
+      <label for="costPrice">成本价：</label>
+      <input type="text" name="costPrice" id="costPrice" />
+      <br />
+      <label for="costCount">持仓数：</label>
+      <input type="text" name="costCount" id="costCount" />
+      <br />
+      <label for="TPrice">T入价：</label>
+      <input type="text" name="TPrice" id="TPrice" />
+      <br />
+      <label for="TCount">T入数：</label>
+      <input type="text" name="TCount" id="TCount" />
+      <br />
+      <div>T入额：<span id="TAmount"></span></div>
+
+      <button type="submit">确定</button>
+      <button type="reset">重置</button>
+
+      <div>T后价：<span id="newTPrice"></span></div>
+      <div>T后数：<span id="newTCount"></span></div>
+      <div>T后盈亏：<span id="newTProfit"></span></div>
+      <div>T后回本幅度：<span id="newTRate"></span></div>
+    </form>
+
+    <script>
+      "use strict";
+
+      const form = document.getElementById("TForm");
+      const TAmountDom = document.getElementById("TAmount");
+      const newTPriceDom = document.getElementById("newTPrice");
+      const newTCountDom = document.getElementById("newTCount");
+      const newTProfitDom = document.getElementById("newTProfit");
+      const newTRateDom = document.getElementById("newTRate");
+
+      form.onsubmit = (e) => {
+        e.preventDefault();
+
+        const costPrice = Number(e.target["costPrice"].value);
+        const costCount = Number(e.target["costCount"].value);
+        const TPrice = Number(e.target["TPrice"].value);
+        const TCount = Number(e.target["TCount"].value);
+
+        const TAmount = TPrice * TCount;
+
+        const newTCount = costCount + TCount;
+        const newTPrice = (costPrice * costCount + TAmount) / newTCount;
+
+        newTPriceDom.textContent = newTPrice.toFixed(3);
+        newTCountDom.textContent = newTCount;
+        TAmountDom.textContent = TAmount.toFixed(3);
+        newTProfitDom.textContent =
+          ((TPrice / newTPrice - 1) * 100).toFixed(3) + "%";
+        newTRateDom.textContent =
+          ((newTPrice / TPrice - 1) * 100).toFixed(3) + "%";
+      };
+    </script>
+  </body>
+</html>
